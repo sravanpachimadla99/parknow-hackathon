@@ -1,0 +1,23 @@
+{
+  "pythonVersion": "3.11",
+  "pythonPlatform": "Windows",
+  "venvPath": "",
+  "pythonPath": "C:\\Users\\sande\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "extraPaths": [
+    "backend",
+    "C:\\Users\\sande\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages"
+  ],
+  "executionEnvironments": [
+    {
+      "root": "backend",
+      "extraPaths": [".", "C:\\Users\\sande\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages"]
+    },
+    {
+      "root": ".",
+      "extraPaths": ["C:\\Users\\sande\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages"]
+    }
+  ],
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none",
+  "typeCheckingMode": "off"
+}

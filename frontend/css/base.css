@@ -1,0 +1,240 @@
+/* ============================================================
+   ParkNow — Base Components
+   ============================================================ */
+
+/* ---- Buttons ---- */
+.btn-primary {
+  width: 100%;
+  padding: .9rem;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: .02em;
+}
+.btn-primary:hover { background: #00ccee; transform: translateY(-1px); }
+
+.btn-secondary {
+  padding: .6rem 1.2rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-danger {
+  padding: .6rem 1.2rem;
+  background: rgba(239,68,68,.1);
+  border: 1px solid rgba(239,68,68,.3);
+  color: var(--danger);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: .85rem;
+}
+.btn-danger:hover { background: rgba(239,68,68,.2); }
+
+/* ---- Forms ---- */
+.form-group  { margin-bottom: 1.2rem; }
+.form-row    { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.form-label {
+  display: block;
+  font-size: .82rem;
+  color: var(--muted);
+  margin-bottom: .45rem;
+  font-weight: 500;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+
+.form-input {
+  width: 100%;
+  padding: .8rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: .95rem;
+  transition: var(--transition);
+  outline: none;
+}
+.form-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,229,255,.1);
+}
+
+.form-error   { color: var(--danger);  font-size: .82rem; margin-top: .4rem; }
+.form-success { color: var(--success); font-size: .82rem; margin-top: .4rem; }
+
+/* ---- Badges ---- */
+.badge {
+  padding: .25rem .7rem;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 600;
+}
+.badge.active    { background: rgba(16,185,129,.15); color: var(--success); }
+.badge.pending   { background: rgba(245,158,11,.15);  color: var(--warning); }
+.badge.cancelled { background: rgba(239,68,68,.15);   color: var(--danger);  }
+
+/* ---- Table ---- */
+.table-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+table { width: 100%; border-collapse: collapse; }
+
+thead th {
+  padding: .9rem 1.5rem;
+  text-align: left;
+  font-size: .77rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+tbody tr { border-bottom: 1px solid var(--border); transition: var(--transition); }
+tbody tr:last-child  { border-bottom: none; }
+tbody tr:hover       { background: var(--surface); }
+tbody td             { padding: 1rem 1.5rem; font-size: .88rem; }
+
+/* ---- Stats Cards ---- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.4rem;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  opacity: .15;
+}
+.stat-card.cyan::before   { background: var(--accent);  }
+.stat-card.purple::before { background: var(--accent2); }
+.stat-card.green::before  { background: var(--success); }
+.stat-card.amber::before  { background: var(--warning); }
+
+.stat-card-label {
+  font-size: .8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.stat-card-num {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: .4rem 0 .2rem;
+}
+.stat-card.cyan   .stat-card-num { color: var(--accent);  }
+.stat-card.purple .stat-card-num { color: var(--accent2); }
+.stat-card.green  .stat-card-num { color: var(--success); }
+.stat-card.amber  .stat-card-num { color: var(--warning); }
+
+/* ---- Toast ---- */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.toast {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: .9rem 1.3rem;
+  font-size: .88rem;
+  min-width: 260px;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  animation: toastIn .3s ease;
+  box-shadow: 0 10px 40px rgba(0,0,0,.4);
+}
+.toast.success { border-color: rgba(16,185,129,.4); }
+.toast.error   { border-color: rgba(239,68,68,.4);  }
+.toast.info    { border-color: rgba(0,229,255,.3);  }
+
+@keyframes toastIn {
+  from { transform: translateX(20px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* ---- Section header ---- */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.8rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.section-sub {
+  color: var(--muted);
+  font-size: .9rem;
+  margin-top: .2rem;
+}
+
+/* ---- Admin cards ---- */
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.admin-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+.admin-card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .stats-grid  { grid-template-columns: repeat(2, 1fr); }
+  .admin-grid  { grid-template-columns: 1fr; }
+  .form-row    { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,268 @@
+/* ============================================================
+   ParkNow — Dashboard Layout & Parking Grid
+   ============================================================ */
+
+/* ---- Page visibility ---- */
+.page        { display: none; }
+.page.active { display: block; }
+
+/* ---- Top Navigation ---- */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,14,26,.9);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; }
+.logo span { color: var(--accent); }
+
+.nav-links { display: flex; gap: .5rem; }
+
+.nav-btn {
+  padding: .45rem 1rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: .85rem;
+  font-weight: 500;
+  transition: var(--transition);
+  background: transparent;
+  color: var(--muted);
+}
+.nav-btn:hover  { color: var(--text); }
+.nav-btn.active { background: var(--surface2); color: var(--accent); }
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  background: var(--surface2);
+  padding: .4rem .9rem;
+  border-radius: 20px;
+  font-size: .85rem;
+}
+.user-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+/* ---- Dash layout ---- */
+.dash-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: calc(100vh - 65px);
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+.sidebar-section {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  padding: .5rem .8rem;
+  margin-top: 1rem;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .65rem .9rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--muted);
+  font-size: .9rem;
+}
+.sidebar-item:hover  { background: var(--surface2); color: var(--text); }
+.sidebar-item.active { background: rgba(0,229,255,.1); color: var(--accent); }
+.sidebar-icon        { font-size: 1.1rem; width: 20px; text-align: center; }
+
+/* ---- Main content area ---- */
+.main-content {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* ---- Parking Grid ---- */
+.parking-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem;
+}
+
+.parking-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.legend-item { display: flex; align-items: center; gap: .5rem; font-size: .82rem; color: var(--muted); }
+.legend-dot  { width: 14px; height: 14px; border-radius: 4px; }
+.legend-dot.free     { background: rgba(16,185,129,.3); border: 1px solid var(--success); }
+.legend-dot.occupied { background: rgba(239,68,68,.3);  border: 1px solid var(--danger);  }
+.legend-dot.reserved { background: rgba(245,158,11,.3); border: 1px solid var(--warning); }
+
+.parking-zones { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.zone-label {
+  font-family: var(--font-display);
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: .7rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.zone-label span {
+  background: var(--surface2);
+  padding: .2rem .6rem;
+  border-radius: 5px;
+  font-size: .75rem;
+}
+
+.slot-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+
+.slot {
+  width: 72px;
+  height: 50px;
+  border-radius: 9px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: .72rem;
+  font-weight: 600;
+  border: 1.5px solid;
+  transition: var(--transition);
+  user-select: none;
+}
+.slot.free     { background: rgba(16,185,129,.12); border-color: var(--success); color: var(--success); }
+.slot.free:hover { background: rgba(16,185,129,.25); transform: translateY(-2px); }
+.slot.occupied { background: rgba(239,68,68,.12);  border-color: var(--danger);  color: var(--danger);  cursor: not-allowed; }
+.slot.reserved { background: rgba(245,158,11,.12); border-color: var(--warning); color: var(--warning); cursor: not-allowed; }
+
+.slot-id   { font-size: .8rem; font-family: var(--font-display); font-weight: 700; }
+.slot-type { font-size: .65rem; opacity: .8; }
+
+/* ---- Profile ---- */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+}
+.profile-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  text-align: center;
+}
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 1rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .dash-layout   { grid-template-columns: 1fr; }
+  .sidebar       { display: none; }
+  .profile-grid  { grid-template-columns: 1fr; }
+}
+
+/* ---- Navigation Map Skills ---- */
+.nav-map {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  animation: slideDown 0.4s ease-out;
+}
+
+.nav-map-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.nav-steps {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.nav-step {
+  font-size: .88rem;
+  line-height: 1.5;
+  color: var(--muted);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.nav-step::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.nav-step-hl {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.nav-path-anim {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawPath 3s linear forwards;
+}
+
+@keyframes drawPath {
+  to { stroke-dashoffset: 0; }
+}
+
+.ping-anim {
+  animation: ping 1.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes ping {
+  0% { r: 3; opacity: 1; }
+  100% { r: 10; opacity: 0; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+

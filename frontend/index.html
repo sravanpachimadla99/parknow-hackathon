@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ParkNow — Smart Parking System</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+
+  <!-- QR Code library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+  <!-- Stylesheets (order matters) -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/modal.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- ============================================================
+       TOP NAVIGATION
+  ============================================================ -->
+    <nav id="mainNav" style="display:none">
+      <div class="logo">Park<span>Now</span></div>
+      <div class="nav-links" id="navLinks"></div>
+      <div class="user-badge">
+        <div class="user-dot"></div>
+        <span id="userBadgeName">User</span>
+        <button class="btn-secondary" style="padding:.3rem .7rem;font-size:.8rem;margin-left:.4rem"
+          onclick="logout()">Logout</button>
+      </div>
+    </nav>
+
+    <!-- ============================================================
+       AUTH PAGE
+  ============================================================ -->
+    <div class="page active" id="authPage">
+      <div class="auth-wrap">
+
+        <!-- Left hero panel -->
+        <div class="auth-hero">
+          <div class="hero-title">Smart<br><span class="hl">Parking</span><br>Reinvented.</div>
+          <div class="hero-sub">
+            Reserve your spot in seconds. Pay online, get a QR ticket
+            and park without hassle.
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="stat-num">48</div>
+              <div class="stat-label">Slots</div>
+            </div>
+            <div>
+              <div class="stat-num">24/7</div>
+              <div class="stat-label">Available</div>
+            </div>
+            <div>
+              <div class="stat-num">QR</div>
+              <div class="stat-label">Entry Ticket</div>
+            </div>
+          </div>
+          <div class="floating-grid" id="floatingGrid"></div>
+        </div>
+
+        <!-- Right form panel -->
+        <div class="auth-form-side">
+          <div class="auth-card">
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+              <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+              <button class="auth-tab" onclick="switchTab('register')">Register</button>
+            </div>
+
+            <!-- Login form -->
+            <div class="auth-form active" id="loginForm">
+              <div class="form-title">Welcome back</div>
+              <div class="form-sub">Sign in to manage your reservations</div>
+
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" id="loginEmail" type="email" placeholder="you@example.com" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input class="form-input" id="loginPass" type="password" placeholder="••••••••" />
+              </div>
+              <div style="text-align:right;margin-top:-.5rem;margin-bottom:1rem">
+                <a href="javascript:void(0)" onclick="openForgotModal()" style="font-size:.85rem;color:var(--primary);text-decoration:none">Forgot Password?</a>
+              </div>
+              <div id="loginError" class="form-error"></div>
+              <button class="btn-primary" onclick="doLogin()">Sign In</button>
+            </div>
+
+            <!-- Register form -->
+            <div class="auth-form" id="registerForm">
+              <div class="form-title">Create account</div>
+              <div class="form-sub">Join ParkNow for smart parking</div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">First Name</label>
+                  <input class="form-input" id="regFirst" placeholder="John" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Last Name</label>
+                  <input class="form-input" id="regLast" placeholder="Doe" />
+                </div>
+              </div>
+              <div class="form-group">
+              <label class="form-label">Email</label>
+              <input class="form-input" id="regEmail" type="email" placeholder="you@example.com" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input class="form-input" id="regPhone" type="tel" placeholder="9876543210" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Vehicle Number</label>
+                <input class="form-input" id="regVehicle" placeholder="KA 01 AB 1234" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Vehicle Type</label>
+                <select class="form-input" id="regVType">
+                  <option value="car">🚗 Car</option>
+                  <option value="bike">🏍️ Bike</option>
+                  <option value="suv">🚙 SUV</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input class="form-input" id="regPass" type="password" />
+              </div>
+              <div id="regError" class="form-error"></div>
+              <div id="regSuccess" class="form-success"></div>
+              <button class="btn-primary" onclick="doRegister()" style="margin-top:.5rem">Create Account →</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+       USER DASHBOARD
+  ============================================================ -->
+    <div class="page" id="userDash">
+      <div class="dash-layout">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-section">Menu</div>
+          <div class="sidebar-item active" id="sb-overview" onclick="showUser('overview')">
+            <span class="sidebar-icon">🏠</span>Overview
+          </div>
+          <div class="sidebar-item" id="sb-book" onclick="showUser('book')">
+            <span class="sidebar-icon">🅿️</span>Book Slot
+          </div>
+          <div class="sidebar-item" id="sb-bookings" onclick="showUser('bookings')">
+            <span class="sidebar-icon">📋</span>My Bookings
+          </div>
+          <div class="sidebar-section">Account</div>
+          <div class="sidebar-item" id="sb-profile" onclick="showUser('profile')">
+            <span class="sidebar-icon">👤</span>Profile
+          </div>
+        </div>
+
+        <!-- Dynamic content -->
+        <div class="main-content" id="userMain"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+       ADMIN DASHBOARD
+  ============================================================ -->
+    <div class="page" id="adminDash">
+      <div class="dash-layout">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-section">Admin</div>
+          <div class="sidebar-item active" id="asb-overview" onclick="showAdmin('overview')">
+            <span class="sidebar-icon">📊</span>Dashboard
+          </div>
+          <div class="sidebar-item" id="asb-slots" onclick="showAdmin('slots')">
+            <span class="sidebar-icon">🗺️</span>Manage Slots
+          </div>
+          <div class="sidebar-item" id="asb-bookings" onclick="showAdmin('bookings')">
+            <span class="sidebar-icon">📋</span>All Bookings
+          </div>
+          <div class="sidebar-item" id="asb-users" onclick="showAdmin('users')">
+            <span class="sidebar-icon">👥</span>Users
+          </div>
+        </div>
+
+        <!-- Dynamic content -->
+        <div class="main-content" id="adminMain"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+       BOOKING MODAL (4-step flow)
+  ============================================================ -->
+    <div class="modal-overlay" id="bookModal">
+      <div class="modal">
+
+        <!-- Step progress bar -->
+        <div class="step-bar">
+          <div class="step-item active" id="si1">
+            <div class="step-num">1</div>
+            <div class="step-label">Details</div>
+          </div>
+          <div class="step-item" id="si2">
+            <div class="step-num">2</div>
+            <div class="step-label">Payment</div>
+          </div>
+          <div class="step-item" id="si3">
+            <div class="step-num">3</div>
+            <div class="step-label">Processing</div>
+          </div>
+          <div class="step-item" id="si4">
+            <div class="step-num">4</div>
+            <div class="step-label">QR Ticket</div>
+          </div>
+        </div>
+
+        <div class="modal-body">
+
+          <!-- ---- STEP 1 : Booking Details ---- -->
+          <div class="modal-step active" id="mstep1">
+            <div class="modal-title">
+              📍 Booking Details — Slot <span id="ms-slot" style="color:var(--accent)"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Vehicle Number</label>
+              <input class="form-input" id="bkVeh" placeholder="KA 01 AB 1234" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Vehicle Type</label>
+              <select class="form-input" id="bkType">
+                <option value="car">🚗 Car</option>
+                <option value="bike">🏍️ Bike</option>
+                <option value="suv">🚙 SUV / Van</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Date</label>
+                <input class="form-input" id="bkDate" type="date" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Start Time</label>
+                <input class="form-input" id="bkTime" type="time" value="09:00" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Duration &amp; Rate</label>
+              <select class="form-input" id="bkDur" onchange="refreshPreview()">
+                <option value="1">1 Hour — ₹30</option>
+                <option value="2">2 Hours — ₹55</option>
+                <option value="3">3 Hours — ₹75</option>
+                <option value="4">4 Hours — ₹90</option>
+                <option value="8" selected>Half Day (8h) — ₹150</option>
+                <option value="24">Full Day — ₹250</option>
+              </select>
+            </div>
+
+            <div class="summary-box">
+              <div class="summary-row"><span class="summary-label">Slot</span> <span class="summary-val"
+                  id="pv-slot">—</span></div>
+              <div class="summary-row"><span class="summary-label">Zone</span> <span class="summary-val"
+                  id="pv-zone">—</span></div>
+              <div class="summary-row"><span class="summary-label">Duration</span><span class="summary-val"
+                  id="pv-dur">8 Hours</span></div>
+              <div class="summary-row"><span class="summary-label">Amount Due</span><span
+                  class="summary-val summary-total" id="pv-cost">₹150</span></div>
+            </div>
+
+            <div class="modal-actions">
+              <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+              <button class="btn-primary" style="width:auto;padding:.7rem 1.8rem" onclick="toStep(2)">Next: Payment
+                →</button>
+            </div>
+          </div>
+
+          <!-- ---- STEP 2 : Payment ---- -->
+          <div class="modal-step" id="mstep2">
+            <div class="modal-title">💳 Select Payment Method</div>
+
+            <div class="payment-methods">
+              <div class="pay-card selected" id="pm-upi" onclick="pickPay('upi')">
+                <div class="pay-icon">📱</div>
+                <div class="pay-name">UPI</div>
+                <div class="pay-desc">GPay · PhonePe · Paytm</div>
+              </div>
+              <div class="pay-card" id="pm-card" onclick="pickPay('card')">
+                <div class="pay-icon">💳</div>
+                <div class="pay-name">Card</div>
+                <div class="pay-desc">Credit / Debit card</div>
+              </div>
+              <div class="pay-card" id="pm-wallet" onclick="pickPay('wallet')">
+                <div class="pay-icon">👛</div>
+                <div class="pay-name">Wallet</div>
+                <div class="pay-desc">Paytm · Amazon Pay</div>
+              </div>
+
+              <div class="pay-card" id="pm-netbanking" onclick="pickPay('netbanking')">
+                <div class="pay-icon">🏦</div>
+                <div class="pay-name">Net Banking</div>
+                <div class="pay-desc">SBI · HDFC · ICICI · Axis</div>
+              </div>
+
+              <div class="pay-card" id="pm-qr" onclick="pickPay('qr')">
+                <div class="pay-icon">🤳</div>
+                <div class="pay-name">QR Code</div>
+                <div class="pay-desc">Scan & Pay (PhonePe)</div>
+              </div>
+            </div>
+
+            <!-- UPI fields -->
+            <div id="upi-f" class="pay-fields">
+              <div class="form-group">
+                <label class="form-label">UPI ID</label>
+                <input class="form-input" id="upiId" placeholder="username@upi" />
+              </div>
+            </div>
+
+            <!-- Card fields -->
+            <div id="card-f" class="pay-fields" style="display:none">
+              <div class="form-group">
+                <label class="form-label">Card Number</label>
+                <input class="form-input" id="payCardNum" placeholder="1234 5678 1234 5678" oninput="fmtCard(this)" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Expiry (MM/YY)</label>
+                  <input class="form-input" id="payCardExp" placeholder="12/26" maxlength="5" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">CVV</label>
+                  <input class="form-input" type="password" id="payCardCvv" placeholder="•••" maxlength="3" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Wallet fields -->
+            <div id="wallet-f" class="pay-fields" style="display:none">
+              <div class="form-group">
+                <label class="form-label">Select Wallet</label>
+                <select class="form-input" id="walletType">
+                  <option value="paytm">Paytm</option>
+                  <option value="amazon">Amazon Pay</option>
+                  <option value="phonepe">PhonePe Wallet</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Net Banking info -->
+            <div id="netbanking-f" class="pay-fields" style="display:none">
+              <p style="color:var(--muted);font-size:.88rem;line-height:1.6">
+                ✨ Securely pay via your bank's portal. You will be redirected to a simulated bank page to authorize the transaction.
+              </p>
+            </div>
+
+            <!-- QR Code info -->
+            <div id="qr-f" class="pay-fields" style="display:none; text-align:center">
+              <div style="background:white; padding:1.2rem; border-radius:16px; display:inline-block; margin-bottom:1rem; border:1px solid var(--border)">
+                <div id="payment-qr"></div>
+                <div style="margin-top:.8rem; display:flex; align-items:center; justify-content:center; gap:.5rem">
+                  <img src="https://static.phonepe.com/images/icons/logo-64.png" style="width:16px; height:16px" alt="PP">
+                  <span style="color:#5f259f; font-weight:700; font-size:.8rem">PhonePe Payment</span>
+                </div>
+              </div>
+              <p style="color:var(--muted); font-size:.85rem; line-height:1.4">
+                Scan this QR to pay <b><span id="qr-cost-val">₹150</span></b> to <br>
+                <b style="color:var(--text)">PACHIMADLA SRAVAN KUMAR</b>
+              </p>
+            </div>
+
+            <div class="summary-box" style="margin-top:1rem">
+              <div class="summary-row">
+                <span class="summary-label">Total Payable</span>
+                <span class="summary-val summary-total" id="pay-total">₹150</span>
+              </div>
+            </div>
+
+            <div id="payError" class="form-error"></div>
+
+            <div class="modal-actions">
+              <button class="btn-secondary" onclick="toStep(1)">← Back</button>
+              <button class="btn-primary" style="width:auto;padding:.7rem 1.8rem" onclick="processPayment()">🔒 Pay
+                Now</button>
+            </div>
+          </div>
+
+          <!-- ---- STEP 3 : Processing ---- -->
+          <div class="modal-step" id="mstep3">
+            <div class="processing">
+                <div class="spinner"></div>
+                <div class="processing-text" id="procText">Processing Payment...</div>
+                <div style="color:var(--muted);font-size:.88rem;margin-top:.4rem" id="procSub">
+                  Do not close this window
+                </div>
+              </div>
+            </div>
+
+            <!-- ---- STEP 4 : QR Ticket ---- -->
+            <div class="modal-step" id="mstep4">
+              <div class="qr-section">
+                <div style="font-size:2.8rem;margin-bottom:.4rem">✅</div>
+                <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700">Booking Confirmed!</div>
+                <div style="color:var(--muted);font-size:.88rem;margin:.4rem 0 .2rem">
+                  Scan the QR code at the parking gate
+                </div>
+                <div class="qr-box">
+                  <div id="qrcode"></div>
+                </div>
+                <div style="font-size:.75rem;color:var(--muted)">Your unique entry pass</div>
+              </div>
+
+              <div class="ticket">
+                <div class="ticket-title">🎫 ParkNow Entry Ticket</div>
+                <div class="ticket-grid" id="ticketGrid"></div>
+                <div class="ticket-foot" id="ticketFoot"></div>
+              </div>
+
+              <!-- Navigation Map Container -->
+              <div id="navMap" class="nav-map" style="display:none"></div>
+
+            <div class="modal-actions" style="justify-content:center;gap:.6rem;margin-top:1.4rem;flex-wrap:wrap">
+                <button class="btn-secondary" onclick="toggleNav()">🧭 Route to Slot</button>
+                <button class="btn-secondary" onclick="closeModal()">Close</button>
+                <button class="btn-primary" style="width:auto;padding:.7rem 1.5rem" onclick="goBookings()">📋 My
+                  Bookings</button>
+              </div>
+            </div>
+
+          </div><!-- /.modal-body -->
+        </div><!-- /.modal -->
+      </div><!-- /.modal-overlay -->
+
+      <!-- AI Chatbot UI -->
+      <div class="chat-widget" id="chatWidget">
+        <div class="chat-window" id="chatWindow" style="display:none">
+          <div class="chat-header">
+            <span>🤖 ParkNow Assistant</span>
+            <button onclick="toggleChat()">×</button>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="msg system">Hi! I'm your AI assistant. How can I help you with parking today?</div>
+          </div>
+          <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ask about bookings, slots..." onkeypress="if(event.key==='Enter') sendChatMessage()" />
+            <button onclick="sendChatMessage()">➤</button>
+          </div>
+        </div>
+        <button class="chat-bubble" onclick="toggleChat()" id="chatBtn">
+          <span>💬</span>
+        </button>
+      </div>
+
+      <!-- Forgot Password Modal -->
+      <div id="forgotModal" class="modal-overlay" style="display:none">
+        <div class="modal" style="max-width:400px">
+          <div class="modal-body">
+            <div class="modal-title">🔑 Reset Password</div>
+            <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.2rem;line-height:1.5">
+              Enter your registered email address and we'll send you a secure reset link (simulated for hackathon).
+            </p>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input class="form-input" id="forgotEmail" type="email" placeholder="you@example.com" />
+            </div>
+            <div id="forgotError" class="form-error"></div>
+            <div id="forgotSuccess" class="form-success" style="color:var(--success);font-size:.88rem;margin-top:.5rem"></div>
+            <div class="modal-actions" style="margin-top:1.5rem">
+              <button class="btn-secondary" onclick="closeForgotModal()">Cancel</button>
+              <button class="btn-primary" id="btnForgot" onclick="doForgotPass()">Send Reset Link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast container -->
+      <div class="toast-container" id="toastCont"></div>
+
+    </div><!-- /.app -->
+
+    <!-- ============================================================
+     JAVASCRIPT — load order matters:
+     db → app → auth → user → admin → booking → payment → qr
+============================================================ -->
+    <script src="js/api.js"></script> <!-- API client + Supabase backend connection -->
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/user.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/booking.js"></script>
+    <script src="js/payment.js"></script>
+    <script src="js/qr.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+
+</html>
