@@ -14,7 +14,19 @@ DB_NAME = os.getenv("DB_NAME", "parknow")
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
+# Performance tuning for serverless (Vercel)
+connect_args = {}
+if "ssl" in SQLALCHEMY_DATABASE_URL:
+    # Example for Aiven/DigitalOcean which require SSL
+    connect_args["ssl"] = {"ca": "/etc/ssl/certs/ca-certificates.crt"}
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, 
+    pool_pre_ping=True,
+    pool_size=5,
+    max_overflow=10,
+    connect_args=connect_args
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()

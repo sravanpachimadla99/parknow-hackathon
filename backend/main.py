@@ -13,7 +13,8 @@ import datetime
 
 Base.metadata.create_all(bind=engine)
 
-def check_reminders():
+# ── Reminder Logic (Shared) ───────────────────
+def trigger_reminders():
     db = SessionLocal()
     try:
         now = datetime.datetime.now()
@@ -29,6 +30,7 @@ def check_reminders():
             models.Booking.time <= window_end
         ).all()
         
+        results = []
         for b in upcoming:
             user = db.query(models.User).filter(models.User.id == b.user_id).first()
             if user:
@@ -42,15 +44,23 @@ def check_reminders():
                     }
                 )
                 b.reminder_sent = True
+                results.append(b.id)
         db.commit()
+        return results
     except Exception as e:
-        print(f"Error in reminder job: {e}")
+        print(f"Error in reminder logic: {e}")
+        return []
     finally:
         db.close()
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(check_reminders, 'interval', minutes=1)
-scheduler.start()
+# Only run scheduler locally (not on Vercel)
+if os.getenv("VERCEL") != "1":
+    def check_reminders_job():
+        trigger_reminders()
+    
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(check_reminders_job, 'interval', minutes=1)
+    scheduler.start()
 
 app = FastAPI(title="ParkNow API", version="1.0.0")
 
@@ -86,6 +96,19 @@ def health_check():
         "version": "1.0.0",
         "time": datetime.datetime.utcnow().isoformat()
     }
+
+@app.get("/api/cron/reminders")
+def cron_reminders(request: Request):
+    # Basic security check for Vercel Cron
+    # https://vercel.com/docs/cron-jobs#securing-cron-jobs
+    cron_key = os.getenv("CRON_SECRET")
+    auth_header = request.headers.get("Authorization")
+    
+    if cron_key and auth_header != f"Bearer {cron_key}":
+        return JSONResponse(status_code=401, content={"error": "Unauthorized"})
+
+    ids_notified = trigger_reminders()
+    return {"status": "success", "notified_count": len(ids_notified), "ids": ids_notified}
 
 frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
 if os.path.exists(frontend_dir):

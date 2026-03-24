@@ -12,16 +12,22 @@
   ],
   "rewrites": [
     {
-      "source": "/api/:path*",
+      "source": "/api/cron/(.*)",
+      "destination": "backend/main.py"
+    },
+    {
+      "source": "/api/(.*)",
       "destination": "backend/main.py"
     },
     {
       "source": "/((?!api/).*)",
       "destination": "/frontend/$1"
-    },
+    }
+  ],
+  "crons": [
     {
-      "source": "/",
-      "destination": "/frontend/index.html"
+      "path": "/api/cron/reminders",
+      "schedule": "*/5 * * * *"
     }
   ]
 }
