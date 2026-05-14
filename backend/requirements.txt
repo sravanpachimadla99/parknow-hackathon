@@ -11,3 +11,4 @@ APScheduler
 bcrypt
 requests
 razorpay
+psycopg2-binary
