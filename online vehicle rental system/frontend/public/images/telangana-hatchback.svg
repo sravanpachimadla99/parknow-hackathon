@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300">
+  <rect width="420" height="300" rx="24" fill="#08101f"/>
+  <path d="M52 180 Q80 130 150 130 H270 Q320 130 360 170 L365 205 H55 Z" fill="#334155"/>
+  <circle cx="120" cy="220" r="28" fill="#38bdf8"/>
+  <circle cx="300" cy="220" r="28" fill="#38bdf8"/>
+  <rect x="140" y="96" width="140" height="38" rx="16" fill="#1e293b"/>
+  <text x="210" y="58" fill="#e2e8f0" font-size="28" font-weight="700" text-anchor="middle">Telangana</text>
+  <text x="210" y="88" fill="#94a3b8" font-size="20" text-anchor="middle">Hatchback</text>
+</svg>

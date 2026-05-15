@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300">
+  <rect width="420" height="300" rx="24" fill="#07121f"/>
+  <path d="M48 170 Q90 110 160 110 H260 Q330 110 372 170 V212 H48 Z" fill="#334155"/>
+  <rect x="80" y="110" width="44" height="38" rx="10" fill="#0f172a"/>
+  <rect x="160" y="110" width="44" height="38" rx="10" fill="#0f172a"/>
+  <rect x="240" y="110" width="44" height="38" rx="10" fill="#0f172a"/>
+  <circle cx="118" cy="230" r="30" fill="#38bdf8"/>
+  <circle cx="302" cy="230" r="30" fill="#38bdf8"/>
+  <text x="210" y="60" fill="#e2e8f0" font-size="28" font-weight="700" text-anchor="middle">Telangana</text>
+  <text x="210" y="92" fill="#94a3b8" font-size="20" text-anchor="middle">SUV</text>
+</svg>
